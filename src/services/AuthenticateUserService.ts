@@ -13,7 +13,6 @@ class AuthenticateUserService{
     async execute({email,password}: IAuthenticateRequest){
         const usersRepositories = getCustomRepository(UsersRepositories);
 
-
         const user = await usersRepositories.findOne({
             email
         })
@@ -22,12 +21,14 @@ class AuthenticateUserService{
             throw new Error("Email/Password incorrect")
         }
 
+        
        const passwordMatch = await compare(password, user.password)
 
         if (!passwordMatch){
             throw new Error("Email/Password incorrect")
         }
 
+        //gerar Token
         const token = sign(
             {
             email: user.email,
